@@ -1,3 +1,5 @@
+# Hype DataFill
+
 ![image|690x492](https://forums.tumult.com/uploads/db2156/optimized/3X/8/2/822ba0ca66c252198e166bf475995594b0728907_2_1380x984.png) 
 
 Simple project to get text previews using data set values. If the browser supports Mutation Observer the dataset keys stay reactive. There is certainly better ways to implement reactivity with a object based two-way data storage like in React or Vue instead of distributed datasets, but it is a demo on getting feedback direct in the IDE and using the additional HTML-attributes panel provided by Hype.
@@ -5,7 +7,7 @@ Simple project to get text previews using data set values. If the browser suppor
 Usage: After registering the dataset keys with `HypeDataFill.mapDatasetToClass` for example `HypeDataFill.mapDatasetToClass('headline', '.data-headline');` every element below an element that has a `data-headline` and has the class `.data-headline` will have the content defined under `data-headline`.
 
 
-Note for version 1.1
+Notes for version 1.1
 ---
 
 **Example:** You mapped `data-user` to the class `.date-user` with `HypeDataFill.mapDatasetToClass('user', '.data-user');` in your Head HTML. When ever you assign `data-user` to a group or symbol all children with the class `.date-user` will be updated. If you are doing this assignment in the IDE it will be set by Hype on every scene load. To avoid that just set `.date-user-initial` instead.
