@@ -1,6 +1,6 @@
 # Hype DataFill
 
-![image|690x492](https://forums.tumult.com/uploads/db2156/optimized/3X/8/2/822ba0ca66c252198e166bf475995594b0728907_2_1380x984.png) 
+![image|690x492](https://playground.maxziebell.de/Hype/DataFill/HypeDataFill.png) 
 
 Simple project to get text previews using data set values. If the browser supports Mutation Observer the dataset keys stay reactive. There is certainly better ways to implement reactivity with a object based two-way data storage like in React or Vue instead of distributed datasets, but it is a demo on getting feedback direct in the IDE and using the additional HTML-attributes panel provided by Hype.
 
