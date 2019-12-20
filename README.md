@@ -1,6 +1,6 @@
 # Hype DataFill
 
-![image|690x492](https://playground.maxziebell.de/Hype/DataFill/HypeDataFill.png)
+![image|690x492](https://playground.maxziebell.de/Hype/DataFill/HypeDataFill.jpg)
 <sup>The cover artwork is not hosted in this repository and &copy;opyrighted by Max Ziebell</sup>
 
 Simple project to get text previews using data set values. If the browser supports Mutation Observer the dataset keys stay reactive. There is certainly better ways to implement reactivity with a object based two-way data storage like in React or Vue instead of distributed datasets, but it is a demo on getting feedback direct in the IDE and using the additional HTML-attributes panel provided by Hype.
@@ -24,12 +24,13 @@ Notes for version 1.1
 
 Content Delivery Network (CDN)
 --
-Latest minified version can be linked into your project using the following in the head section of your project:
+Latest version can be linked into your project using the following in the head section of your project:
 ```html
 <script src="https://cdn.jsdelivr.net/gh/worldoptimizer/HypeDataFill/HypeDataFill.min.js"></script>
 ```
 
-Optionally you can also link a SRI version or specific releases. Read more about that on the JsDelivr (CDN) page for this extension at https://www.jsdelivr.com/package/gh/worldoptimizer/HypeDataFill
+Optionally you can also link a SRI version or specific releases. 
+Read more about that on the JsDelivr (CDN) page for this extension at https://www.jsdelivr.com/package/gh/worldoptimizer/HypeDataFill
 
-Learn how to use the latest extension version and how to combine extentions into one file at
+Learn how to use the latest extension version and how to combine extensions into one file at
 https://github.com/worldoptimizer/HypeCookBook/wiki/Including-external-files-and-Hype-extensions
