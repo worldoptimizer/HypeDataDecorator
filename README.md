@@ -24,7 +24,7 @@ Now every `data-label` value update reflects in groups and symbols on each eleme
 Notes for version 1.2.0
 ---
 <sup>Switched to semantic versioning.</sup>  
-**Usage with callback (Update v1.2.0):**
+**Usage with callback:**  
 Allowing for things like mapping `data-bgcolor` to the class `.bgcolor` and fireing a custom callback.
 
 ``` 
