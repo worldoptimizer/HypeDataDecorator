@@ -1,5 +1,5 @@
 /*!
-Hype DataFill 1.2
+Hype DataFill 1.2.0
 copyright (c) 2019 Max Ziebell, (https://maxziebell.de). MIT-license
 */
 
@@ -7,7 +7,7 @@ copyright (c) 2019 Max Ziebell, (https://maxziebell.de). MIT-license
 * Version-History
 * 1.0 Initial release under MIT-license
 * 1.1 Added option to set initial value
-* 1.2 Inspired by Symbol Override I added a callback
+* 1.2.0 Inspired by Symbol Override I added a callback
 */
 if("HypeDataFill" in window === false) window['HypeDataFill'] = (function () {
 
@@ -96,7 +96,7 @@ if("HypeDataFill" in window === false) window['HypeDataFill'] = (function () {
 	
 	/* Reveal Public interface to window['HypeDataFill'] */
 	return {
-		version: '1.2',
+		version: '1.2.0',
 		'mapDatasetToClass' : mapDatasetToClass,
 	};
 })();
