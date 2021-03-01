@@ -1,5 +1,5 @@
 /*!
-Hype DataFill 1.1
+Hype DataFill 1.2
 copyright (c) 2019 Max Ziebell, (https://maxziebell.de). MIT-license
 */
 
@@ -7,17 +7,15 @@ copyright (c) 2019 Max Ziebell, (https://maxziebell.de). MIT-license
 * Version-History
 * 1.0 Initial release under MIT-license
 * 1.1 Added option to set initial value
+* 1.2 Inspired by Symbol Override I added a callback
 */
 if("HypeDataFill" in window === false) window['HypeDataFill'] = (function () {
 
 	var _mapList = [];
 	var _activated = {};
 	
-	function isHypeIDE() {
-		var isHypeScratch = window.location.href.indexOf("/Hype/Scratch/HypeScratch.") != -1;
-		var hasHypeEditorElm = !!document.getElementById('HypeSceneEditor');
-		return isHypeScratch && hasHypeEditorElm;
-	}
+	/* @const */
+	const _isHypeIDE = window.location.href.indexOf("/Hype/Scratch/HypeScratch.") != -1;
 
 	function watchContentNodes (hypeDocument, element, event) {
 		var baseContainer = hypeDocument.getElementById(hypeDocument.documentId());
@@ -25,7 +23,7 @@ if("HypeDataFill" in window === false) window['HypeDataFill'] = (function () {
 	}
 
 	function activateObserverIDE (){
-		if (isHypeIDE){
+		if (_isHypeIDE){
 			var baseContainer = document.documentElement || document.body;
 			activateObserver(baseContainer);
 		}
@@ -40,7 +38,10 @@ if("HypeDataFill" in window === false) window['HypeDataFill'] = (function () {
 		});
 	}
 
-	function observerFactory(attributeName, selector){
+	function observerFactory(attributeName, selector, callback){
+		callback = typeof callback == 'function'? callback: function(elm, value){
+			elm.innerHTML = value;
+		};
 		return function(mutations) {
 			mutations.forEach(function(mutation) {
 				if (mutation.type == 'attributes') {
@@ -48,13 +49,13 @@ if("HypeDataFill" in window === false) window['HypeDataFill'] = (function () {
 						var currentValue = mutation.target.getAttribute(attributeName);
 						var targetElms = mutation.target.querySelectorAll(selector);
 						for (var i=0; i < targetElms.length; i++) {
-							targetElms[i].innerHTML = currentValue;
+							callback(targetElms[i], currentValue);
 						}
 					}
 					if (mutation.attributeName == attributeName+'-initial') {
 						var initialValue = mutation.target.getAttribute(attributeName+'-initial');
 						var currentValue = mutation.target.getAttribute(attributeName);
-						if (isHypeIDE()){
+						if (_isHypeIDE){
 							mutation.target.setAttribute(attributeName, initialValue);
 						} else {
 							if (currentValue!=null ) {
@@ -68,13 +69,13 @@ if("HypeDataFill" in window === false) window['HypeDataFill'] = (function () {
 			});
 		}
 	}
-
-	function mapDatasetToClass (key, selector){
+	
+	function mapDatasetToClass (key, selector, callback){
 		var mapItem = {};
 		var attributeName = 'data-'+key;
 
 		mapItem.attributeName = attributeName;
-		mapItem.observerFunction = observerFactory(attributeName, selector);
+		mapItem.observerFunction = observerFactory(attributeName, selector, callback);
 		mapItem.observer = new MutationObserver(mapItem.observerFunction);
 
 		mapItem.startObserver = function(target){
@@ -95,7 +96,7 @@ if("HypeDataFill" in window === false) window['HypeDataFill'] = (function () {
 	
 	/* Reveal Public interface to window['HypeDataFill'] */
 	return {
-		version: '1.1',
-		'mapDatasetToClass' : mapDatasetToClass
+		version: '1.2',
+		'mapDatasetToClass' : mapDatasetToClass,
 	};
 })();
