@@ -15,12 +15,40 @@ Notes for version 1.1
 
 **Explanation of initial-clause:** All values set with the attribute panel in Hype are persistent duo to the Hype runtime refreshing them on each scene load.  This little "genie" at work might be what people expect using the IDE but it certainly isn't how programmers updating values per script would expect things to behave. Hype DataFill 1.1 now has a baked in workaround for this… just add "-initial" to your attribute entry (for example `data-user-initial` given your key is normally `data-user`). Then this value will only be set as an initial value and honor updates done via script like `yourElement.dataset.user = "Max Musterman";` across scene transition. They are anyway honored in a scene context either way.
 
+**Regular usage:**
+```
+HypeDataFill.mapDatasetToClass('label', '.label'});
+```
+Now every data-label value and update propageates down into groups and symbols affecting each element with the class `.label`.
+
+Notes for version 1.2
+---
+
+**Usage with callback (Update v1.2.0):**
+Allowing for things like mapping `data-bgcolor` to the class `.bgcolor` and fireing a custom callback.
+
+``` 
+HypeDataFill.mapDatasetToClass('bgcolor', '.bgcolor', function(elm, value){
+	elm.style.backgroundColor=value;
+});
+
+```
+
+Default callback is still only doing this … no need to set it.
+
+```
+function(elm, value){
+	elm.innerHTML = value;
+}
+```
+
 **Demo Example**\
 [HypeDataFill.html ](https://playground.maxziebell.de/Hype/DataFill/HypeDataFill.html)
 
 **Version history**\
 `1.0 Initial release under MIT-license`\
 `1.1 Added option to set initial value`
+`1.2 Inspired by Symbol Override I added a callback`
 
 Content Delivery Network (CDN)
 --
