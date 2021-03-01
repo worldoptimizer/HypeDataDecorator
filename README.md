@@ -19,7 +19,7 @@ Notes for version 1.1
 ```
 HypeDataFill.mapDatasetToClass('label', '.label'});
 ```
-Now every `data-label` value update propageates into groups and symbols affecting each element with the class `.label`.
+Now every `data-label` value update reflects in groups and symbols on each element with the class `.label`.
 
 Notes for version 1.2.0
 ---
