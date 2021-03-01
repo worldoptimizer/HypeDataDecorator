@@ -21,9 +21,9 @@ HypeDataFill.mapDatasetToClass('label', '.label'});
 ```
 Now every data-label value and update propageates down into groups and symbols affecting each element with the class `.label`.
 
-Notes for version 1.2
+Notes for version 1.2.0
 ---
-
+<sup>Switched to semantic versioning.</sup>  
 **Usage with callback (Update v1.2.0):**
 Allowing for things like mapping `data-bgcolor` to the class `.bgcolor` and fireing a custom callback.
 
