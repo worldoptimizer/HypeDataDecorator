@@ -21,7 +21,7 @@ HypeDataFill.mapDatasetToClass('label'});
 ```
 Now every `data-label` value update reflects in groups and symbols on each element with the class `.label`.
 
-Notes for version 1.2.3
+Notes for version 1.2.4
 ---
 <sup>Switched to semantic versioning.</sup>  
 **Usage with callback and refactored interface:**  
@@ -57,7 +57,8 @@ function(elm, value){
 `1.2.0 Inspired by Symbol Override I added a callback`\
 `1.2.1 Also updating when class is modified (only in IDE)`\
 `1.2.2 Minor bugfix on preview, refactored names (breaking change)`\
-`1.2.3 Remove the possibility for recursive loops in IDE and console.log`
+`1.2.3 Remove the possibility for recursive loops in IDE and console.log`\
+`1.2.4 Added hypeDocument, symbolInstance to callback and setContent
 
 Content Delivery Network (CDN)
 --
