@@ -1,6 +1,6 @@
 /*!
-Hype DataFill 1.2.4
-copyright (c) 2019 Max Ziebell, (https://maxziebell.de). MIT-license
+Hype Data Decorator 1.2.5
+copyright (c) created 2019, refactored 2021 by Max Ziebell, (https://maxziebell.de). MIT-license
 */
 
 /*
@@ -12,8 +12,9 @@ copyright (c) 2019 Max Ziebell, (https://maxziebell.de). MIT-license
 * 1.2.2 Minor bugfix on preview, refactored names (breaking change)
 * 1.2.3 Remove the possibility for recursive loops in IDE and console.log
 * 1.2.4 Added hypeDocument, symbolInstance to callback and setContent
+* 1.2.5 Renamed and refactored to Hype Data Decorator
 */
-if("HypeDataFill" in window === false) window['HypeDataFill'] = (function () {
+if("HypeDataDecorator" in window === false) window['HypeDataDecorator'] = (function () {
 
 	var _mapList = [];
 	var _activated = {};
@@ -130,9 +131,9 @@ if("HypeDataFill" in window === false) window['HypeDataFill'] = (function () {
 	if("HYPE_eventListeners" in window === false) { window.HYPE_eventListeners = Array();}
 	window.HYPE_eventListeners.push({"type":"HypeDocumentLoad", "callback": observerMappedItems});
 	
-	/* Reveal Public interface to window['HypeDataFill'] */
+	/* Reveal Public interface to window['HypeDataDecorator'] */
 	return {
-		version: '1.2.4',
+		version: '1.2.5',
 		'mapDatasetToClass' : mapDatasetToClass,
 		'mapDatasetToSelector' : mapDatasetToSelector,
 		'setContent' : setContent,
