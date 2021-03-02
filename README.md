@@ -34,8 +34,8 @@ HypeDataFill.mapDatasetToClass('bgcolor', function(elm, value){
 	elm.style.backgroundColor = value;
 });
 
-// map based on selector with default innerHTML callback
-HypeDataFill.mapDatasetToSelector('price', '.only.here', function(elm, value){
+// map based on more complex selector with custom currency callback
+HypeDataFill.mapDatasetToSelector('price', '.currency.formatted', function(elm, value){
 	elm.innerHTML = new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(value); 
 });
 ```
