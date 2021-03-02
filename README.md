@@ -38,6 +38,34 @@ HypeDataFill.mapDatasetToClass('bgcolor', function(elm, value){
 HypeDataFill.mapDatasetToSelector('price', '.currency.formatted', function(elm, value){
 	elm.innerHTML = new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(value); 
 });
+
+// preset based overrides with hypeDocument callback
+HypeDataFill.mapDatasetToClass('preset', function(elm, value){
+	switch (value){
+		case "invalid":
+			elm.style.backgroundColor = 'red';
+			elm.style.color = 'yellow';
+			elm.innerHTML = 'Broken!';
+			//...
+			break;
+
+		case "valid":
+			elm.style.backgroundColor = 'green';
+			elm.style.color = 'white';
+			elm.innerHTML = 'Fixed';
+			//...
+			break;
+
+	}
+});
+
+// callback with hypeDocument and symbolInstance
+HypeDataFill.mapDatasetToClass('symbol-start', function(elm, value, hypeDocument, symbolInstance){
+	if(symbolInstance) {
+		symbolInstance.startTimelineNamed(value, hypeDocument.kDirectionForward);
+		console.log("was here in document "+hypeDocument.documentId()); //should be 3
+	}
+});
 ```
 
 Default callback still only replaces the content in a save way (meaning if its and end node).
