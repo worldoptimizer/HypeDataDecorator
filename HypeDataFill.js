@@ -1,5 +1,5 @@
 /*!
-Hype DataFill 1.2.0
+Hype DataFill 1.2.1
 copyright (c) 2019 Max Ziebell, (https://maxziebell.de). MIT-license
 */
 
@@ -8,12 +8,14 @@ copyright (c) 2019 Max Ziebell, (https://maxziebell.de). MIT-license
 * 1.0 Initial release under MIT-license
 * 1.1 Added option to set initial value
 * 1.2.0 Inspired by Symbol Override I added a callback
+* 1.2.1 Also updating when class is modified (only in IDE)
 */
 if("HypeDataFill" in window === false) window['HypeDataFill'] = (function () {
 
 	var _mapList = [];
 	var _activated = {};
-	
+	var _lastRefresh = 0;
+
 	/* @const */
 	const _isHypeIDE = window.location.href.indexOf("/Hype/Scratch/HypeScratch.") != -1;
 
@@ -26,6 +28,8 @@ if("HypeDataFill" in window === false) window['HypeDataFill'] = (function () {
 		if (_isHypeIDE){
 			var baseContainer = document.documentElement || document.body;
 			activateObserver(baseContainer);
+			var classObserver = new MutationObserver(function(m){ refresh(); });
+			classObserver.observe(baseContainer, { attributes: true, subtree: true, attributeFilter: [ 'class' ]});
 		}
 	}
 
@@ -33,8 +37,18 @@ if("HypeDataFill" in window === false) window['HypeDataFill'] = (function () {
 		_mapList.forEach(function(mapItem) {
 			if (!_activated[baseContainer+'_'+mapItem.attributeName]){
 				_activated[baseContainer+'_'+mapItem.attributeName] = true;
+				mapItem.baseContainer = baseContainer;
 				mapItem.startObserver(baseContainer);
 			}
+		});
+	}
+
+	function refresh (){
+		var now = new Date().getTime(); if (_lastRefresh == now) return; _lastRefresh = now;
+		_mapList.forEach(function(mapItem) {
+			mapItem.baseContainer.querySelectorAll('['+mapItem.attributeName+']').forEach(function(elm){
+				elm.setAttribute(mapItem.attributeName, elm.getAttribute(mapItem.attributeName));
+			});
 		});
 	}
 
@@ -96,7 +110,7 @@ if("HypeDataFill" in window === false) window['HypeDataFill'] = (function () {
 	
 	/* Reveal Public interface to window['HypeDataFill'] */
 	return {
-		version: '1.2.0',
+		version: '1.2.1',
 		'mapDatasetToClass' : mapDatasetToClass,
 	};
 })();
