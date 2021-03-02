@@ -40,7 +40,9 @@ HypeDataFill.mapDatasetToSelector('price', '.currency.formatted', function(elm, 
 });
 ```
 
-Default callback is still only replaces the content in a save way (meaning if its and end node).
+Default callback still only replaces the content in a save way (meaning if its and end node).
+
+---
 
 **Demo Example**\
 [HypeDataFill.html ](https://playground.maxziebell.de/Hype/DataFill/HypeDataFill.html)
