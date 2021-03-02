@@ -1,5 +1,5 @@
 /*!
-Hype DataFill 1.2.2
+Hype DataFill 1.2.3
 copyright (c) 2019 Max Ziebell, (https://maxziebell.de). MIT-license
 */
 
@@ -10,6 +10,7 @@ copyright (c) 2019 Max Ziebell, (https://maxziebell.de). MIT-license
 * 1.2.0 Inspired by Symbol Override I added a callback
 * 1.2.1 Also updating when class is modified (only in IDE)
 * 1.2.2 Minor bugfix on preview, refactored names (breaking change)
+* 1.2.3 Remove the possibility for recursive loops in IDE and console.log
 */
 if("HypeDataFill" in window === false) window['HypeDataFill'] = (function () {
 
@@ -21,11 +22,10 @@ if("HypeDataFill" in window === false) window['HypeDataFill'] = (function () {
 	const _isHypeIDE = window.location.href.indexOf("/Hype/Scratch/HypeScratch.") != -1;
 
 	if (_isHypeIDE) {
-		//var _lastRefresh = 0;
+		var _lastRefresh = 0;
 
 		function refreshIDE (){
-			//	var now = new Date().getTime(); if (_lastRefresh == now) return; _lastRefresh = now;
-			console.log("refresh");
+			var now = Math.round(new Date().getTime()/10); if (_lastRefresh == now) return; _lastRefresh = now;
 			_mapList.forEach(function(mapItem) {
 				mapItem.baseContainer.querySelectorAll('['+mapItem.attributeName+']').forEach(function(elm){
 					elm.setAttribute(mapItem.attributeName, elm.getAttribute(mapItem.attributeName));
@@ -50,7 +50,6 @@ if("HypeDataFill" in window === false) window['HypeDataFill'] = (function () {
 
 	function activateObserver (baseContainer){
 		_mapList.forEach(function(mapItem) {
-			console.log(mapItem);
 			if (!_activated[baseContainer+'_'+mapItem.attributeName]){
 				_activated[baseContainer+'_'+mapItem.attributeName] = true;
 				mapItem.baseContainer = baseContainer;
@@ -64,7 +63,6 @@ if("HypeDataFill" in window === false) window['HypeDataFill'] = (function () {
 			elm.innerHTML = value;
 		};
 		return function(mutations) {
-			console.log(mutations);
 			mutations.forEach(function(mutation) {
 				if (mutation.type == 'attributes') {
 					if (mutation.attributeName == attributeName) {
@@ -126,8 +124,9 @@ if("HypeDataFill" in window === false) window['HypeDataFill'] = (function () {
 	
 	/* Reveal Public interface to window['HypeDataFill'] */
 	return {
-		version: '1.2.2',
+		version: '1.2.3',
 		'mapDatasetToClass' : mapDatasetToClass,
 		'mapDatasetToSelector' : mapDatasetToSelector,
+		'isHypeIDE': function(){return _isHypeIDE; }
 	};
 })();
