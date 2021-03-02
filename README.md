@@ -48,7 +48,8 @@ function(elm, value){
 **Version history**\
 `1.0 Initial release under MIT-license`\
 `1.1 Added option to set initial value`
-`1.2 Inspired by Symbol Override I added a callback`
+`1.2.0 Inspired by Symbol Override I added a callback`
+`1.2.1 Also updating when class is modified (only in IDE)`
 
 Content Delivery Network (CDN)
 --
