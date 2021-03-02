@@ -1,5 +1,5 @@
 /*!
-Hype DataFill 1.2.3
+Hype DataFill 1.2.4
 copyright (c) 2019 Max Ziebell, (https://maxziebell.de). MIT-license
 */
 
@@ -11,12 +11,12 @@ copyright (c) 2019 Max Ziebell, (https://maxziebell.de). MIT-license
 * 1.2.1 Also updating when class is modified (only in IDE)
 * 1.2.2 Minor bugfix on preview, refactored names (breaking change)
 * 1.2.3 Remove the possibility for recursive loops in IDE and console.log
+* 1.2.4 Added hypeDocument, symbolInstance to callback and setContent
 */
 if("HypeDataFill" in window === false) window['HypeDataFill'] = (function () {
 
 	var _mapList = [];
 	var _activated = {};
-	
 
 	/* @const */
 	const _isHypeIDE = window.location.href.indexOf("/Hype/Scratch/HypeScratch.") != -1;
@@ -33,43 +33,62 @@ if("HypeDataFill" in window === false) window['HypeDataFill'] = (function () {
 			});
 		}
 
-		function activateObserverIDE (){
-			if (_isHypeIDE){
+		window.addEventListener('DOMContentLoaded', function (event){
+    		if (_isHypeIDE){
 				var baseContainer = document.documentElement || document.body;
-				activateObserver(baseContainer);
-				var classObserver = new MutationObserver(function(m){ refreshIDE(); });
+				var classObserver = new MutationObserver(function(){ refreshIDE(); });
 				classObserver.observe(baseContainer, { attributes: true, subtree: true, attributeFilter: [ 'class' ]});
-			}
-		}
-	}
-
-	function observerMappedItems (hypeDocument, element, event) {
-		var baseContainer = hypeDocument.getElementById(hypeDocument.documentId());
-		activateObserver(baseContainer);
-	}
-
-	function activateObserver (baseContainer){
-		_mapList.forEach(function(mapItem) {
-			if (!_activated[baseContainer+'_'+mapItem.attributeName]){
-				_activated[baseContainer+'_'+mapItem.attributeName] = true;
-				mapItem.baseContainer = baseContainer;
-				mapItem.startObserver(baseContainer);
+				activateObserver(baseContainer);
 			}
 		});
 	}
 
-	function observerFactory(attributeName, selector, callback){
-		callback = typeof callback == 'function'? callback: function(elm, value){
-			elm.innerHTML = value;
-		};
+	function activateObserver (baseContainer, hypeDocument){
+		_mapList.forEach(function(mapItem) {
+			if (!_activated[baseContainer+'_'+mapItem.attributeName]){
+				_activated[baseContainer+'_'+mapItem.attributeName] = true;
+				mapItem.baseContainer = baseContainer;
+				mapItem.observerFunction = observerFactory(
+					mapItem.attributeName, 
+					mapItem.selector, 
+					mapItem.callback,
+					hypeDocument
+				);
+				mapItem.observer = new MutationObserver(
+					mapItem.observerFunction
+				);
+				mapItem.startObserver = function(target){
+					this.observer.observe(target, { 
+						attributes: true,
+						subtree: true,
+						attributeFilter: [ this.attributeName, this.attributeName+'-initial' ]
+					});
+				};
+				mapItem.startObserver(
+					baseContainer, 
+					hypeDocument
+				);
+			}
+		});
+	}
+
+	function setContent(elm, value){
+		if (elm.querySelector('.HYPE_element_container, .HYPE_element')) return;
+		elm.innerHTML = value;
+	}
+
+	function observerFactory(attributeName, selector, callback, hypeDocument){
+		callback = typeof callback == 'function'? callback: setContent;
 		return function(mutations) {
 			mutations.forEach(function(mutation) {
 				if (mutation.type == 'attributes') {
 					if (mutation.attributeName == attributeName) {
 						var currentValue = mutation.target.getAttribute(attributeName);
-						var targetElms = mutation.target.querySelectorAll(selector);
+						var targetElms = [].slice.call(mutation.target.querySelectorAll(selector));
+						if(mutation.target.matches(selector)) targetElms.unshift(mutation.target);
 						for (var i=0; i < targetElms.length; i++) {
-							callback(targetElms[i], currentValue);
+							var symbolInstance = hypeDocument? hypeDocument.getSymbolInstanceById(targetElms[i].id):null; 
+							callback(targetElms[i], currentValue, hypeDocument, symbolInstance);
 						}
 					}
 					if (mutation.attributeName == attributeName+'-initial') {
@@ -89,34 +108,23 @@ if("HypeDataFill" in window === false) window['HypeDataFill'] = (function () {
 			});
 		}
 	}
+
+	function observerMappedItems (hypeDocument, element, event) {
+		var baseContainer = hypeDocument.getElementById(hypeDocument.documentId());
+		activateObserver(baseContainer, hypeDocument);
+	}
 	
 	function mapDatasetToClass (key, callback){
 		mapDatasetToSelector(key, '.'+key, callback);
 	}
 
 	function mapDatasetToSelector (key, selector, callback){
-		var mapItem = {};
-		var attributeName = 'data-'+key;
-
-		mapItem.attributeName = attributeName;
-		mapItem.observerFunction = observerFactory(attributeName, selector, callback);
-		mapItem.observer = new MutationObserver(mapItem.observerFunction);
-
-		mapItem.startObserver = function(target){
-			this.observer.observe(target, { 
-				attributes: true,
-				subtree: true,
-				attributeFilter: [ this.attributeName, this.attributeName+'-initial' ]
-			});
-		}
-
-		_mapList.push(mapItem);
-
+		_mapList.push( {
+			attributeName : 'data-'+key,
+			selector : selector.trim(),
+			callback : callback,
+		} );
 	}
-
-	if (_isHypeIDE) window.addEventListener('DOMContentLoaded', function (event){
-    	activateObserverIDE();
-	});
 
 	/* setup callbacks */
 	if("HYPE_eventListeners" in window === false) { window.HYPE_eventListeners = Array();}
@@ -124,9 +132,9 @@ if("HypeDataFill" in window === false) window['HypeDataFill'] = (function () {
 	
 	/* Reveal Public interface to window['HypeDataFill'] */
 	return {
-		version: '1.2.3',
+		version: '1.2.4',
 		'mapDatasetToClass' : mapDatasetToClass,
 		'mapDatasetToSelector' : mapDatasetToSelector,
-		'isHypeIDE': function(){return _isHypeIDE; }
+		'setContent' : setContent,
 	};
 })();
