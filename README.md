@@ -25,7 +25,7 @@ Notes for version 1.2.4
 ---
 <sup>Switched to semantic versioning.</sup>  
 **Usage with callback and refactored interface:**  
-``` 
+```javascript 
 // map based on class hence data-headline --> .headline with default innerHTML callback
 HypeDataFill.mapDatasetToClass('headline');
 
