@@ -21,10 +21,10 @@ HypeDataDecorator.mapDatasetToClass('label'});
 ```
 Now every `data-label` value update reflects in groups and symbols on each element with the class `.label`.
 
-Notes for version 1.2.4
+Notes for version 1.2.5
 ---
 <sup>Switched to semantic versioning.</sup>  
-**Usage with callback and refactored interface:**  
+**Usage with callback and refactored interface and name to reflect new capabilities:**  
 ```javascript 
 // map based on class hence data-headline --> .headline with default innerHTML callback
 HypeDataDecorator.mapDatasetToClass('headline');
@@ -79,7 +79,8 @@ Default callback still only replaces the content in a save way (meaning if its a
 `1.2.1 Also updating when class is modified (only in IDE)`\
 `1.2.2 Minor bugfix on preview, refactored names (breaking change)`\
 `1.2.3 Remove the possibility for recursive loops in IDE and console.log`\
-`1.2.4 Added hypeDocument, symbolInstance to callback and setContent
+`1.2.4 Added hypeDocument, symbolInstance to callback and setContent`\
+`1.2.5 Renamed and refactored to Hype Data Decorator`
 
 Content Delivery Network (CDN)
 --
