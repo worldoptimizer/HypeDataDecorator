@@ -21,17 +21,23 @@ HypeDataFill.mapDatasetToClass('label', '.label'});
 ```
 Now every `data-label` value update reflects in groups and symbols on each element with the class `.label`.
 
-Notes for version 1.2.0
+Notes for version 1.2
 ---
 <sup>Switched to semantic versioning.</sup>  
-**Usage with callback:**  
-Allowing for things like mapping `data-bgcolor` to the class `.bgcolor` and fireing a custom callback.
-
+**Usage with callback and refactored interface (breaking change):**  
 ``` 
-HypeDataFill.mapDatasetToClass('bgcolor', '.bgcolor', function(elm, value){
-	elm.style.backgroundColor=value;
+// map based on class hence data-headline --> .headline with default innerHTML callback
+HypeDataFill.mapDatasetToClass('headline');
+
+// map based on class hence data-bgcolor --> .bgcolor with custom callback
+HypeDataFill.mapDatasetToClass('bgcolor', function(elm, value){
+	elm.style.backgroundColor = value;
 });
 
+// map based on selector with default innerHTML callback
+HypeDataFill.mapDatasetToSelector('price', '.only.here', function(elm, value){
+	elm.innerHTML = new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(value); 
+});
 ```
 
 Default callback is still only doing this … no need to set it.
@@ -50,6 +56,7 @@ function(elm, value){
 `1.1 Added option to set initial value`
 `1.2.0 Inspired by Symbol Override I added a callback`
 `1.2.1 Also updating when class is modified (only in IDE)`
+`1.2.2 Minor bugfix on preview, refactored names (breaking change)`
 
 Content Delivery Network (CDN)
 --
