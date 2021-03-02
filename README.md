@@ -24,7 +24,7 @@ Now every `data-label` value update reflects in groups and symbols on each eleme
 Notes for version 1.2.3
 ---
 <sup>Switched to semantic versioning.</sup>  
-**Usage with callback and refactored interface (breaking change):**  
+**Usage with callback and refactored interface:**  
 ``` 
 // map based on class hence data-headline --> .headline with default innerHTML callback
 HypeDataFill.mapDatasetToClass('headline');
