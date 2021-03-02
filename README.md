@@ -63,7 +63,7 @@ HypeDataFill.mapDatasetToClass('preset', function(elm, value){
 HypeDataFill.mapDatasetToClass('symbol-start', function(elm, value, hypeDocument, symbolInstance){
 	if(symbolInstance) {
 		symbolInstance.startTimelineNamed(value, hypeDocument.kDirectionForward);
-		console.log("was here in document "+hypeDocument.documentId()); //should be 3
+		console.log("was here in document "+hypeDocument.documentId());
 	}
 });
 ```
