@@ -56,7 +56,7 @@ function(elm, value){
 `1.1 Added option to set initial value`\
 `1.2.0 Inspired by Symbol Override I added a callback`\
 `1.2.1 Also updating when class is modified (only in IDE)`\
-`1.2.2 Minor bugfix on preview, refactored names (breaking change)`\
+`1.2.2 Minor bugfix on preview, refactored names (breaking change)`
 
 Content Delivery Network (CDN)
 --
