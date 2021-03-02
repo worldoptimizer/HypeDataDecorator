@@ -21,7 +21,7 @@ HypeDataFill.mapDatasetToClass('label', '.label'});
 ```
 Now every `data-label` value update reflects in groups and symbols on each element with the class `.label`.
 
-Notes for version 1.2.2
+Notes for version 1.2.3
 ---
 <sup>Switched to semantic versioning.</sup>  
 **Usage with callback and refactored interface (breaking change):**  
