@@ -24,7 +24,10 @@ Now every `data-label` value update reflects in groups and symbols on each eleme
 Notes for version 1.2.5
 ---
 <sup>Switched to semantic versioning.</sup>  
-**Usage with callback and refactored interface and name to reflect new capabilities:**  
+**Usage with callback and refactored interface and name to reflect new capabilities:** 
+
+Various examples:
+
 ```javascript 
 // map based on class hence data-headline --> .headline with default innerHTML callback
 HypeDataDecorator.mapDatasetToClass('headline');
@@ -37,6 +40,14 @@ HypeDataDecorator.mapDatasetToClass('bgcolor', function(elm, value){
 // map based on more complex selector with custom currency callback
 HypeDataDecorator.mapDatasetToSelector('price', '.currency.formatted', function(elm, value){
 	elm.innerHTML = new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(value); 
+});
+
+// callback with hypeDocument and symbolInstance
+HypeDataDecorator.mapDatasetToClass('symbol-start', function(elm, value, hypeDocument, symbolInstance){
+	if(symbolInstance) {
+		symbolInstance.startTimelineNamed(value, hypeDocument.kDirectionForward);
+		console.log("was here in document "+hypeDocument.documentId());
+	}
 });
 
 // preset based overrides with hypeDocument callback
@@ -59,16 +70,36 @@ HypeDataDecorator.mapDatasetToClass('preset', function(elm, value){
 	}
 });
 
-// callback with hypeDocument and symbolInstance
-HypeDataDecorator.mapDatasetToClass('symbol-start', function(elm, value, hypeDocument, symbolInstance){
-	if(symbolInstance) {
-		symbolInstance.startTimelineNamed(value, hypeDocument.kDirectionForward);
-		console.log("was here in document "+hypeDocument.documentId());
-	}
-});
+
 ```
 
 Default callback still only replaces the content in a save way (meaning if its and end node).
+
+Also, one can use the a preset like setting to set multiple values:
+
+https://forums.tumult.com/uploads/db2156/original/3X/9/6/96edabcaca7c2c57eabfff4acfb7da559a526d21.gif
+
+```
+// preset based overrides with hypeDocument callback
+HypeDataDecorator.mapDatasetToClass('preset', function(elm, value){
+	switch (value){
+		case "invalid":
+			elm.style.backgroundColor = 'red';
+			elm.style.color = 'yellow';
+			elm.innerHTML = 'Broken!';
+			//...
+			break;
+
+		case "valid":
+			elm.style.backgroundColor = 'green';
+			elm.style.color = 'white';
+			elm.innerHTML = 'Fixed';
+			//...
+			break;
+
+	}
+});
+```
 
 ---
 
