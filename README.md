@@ -77,7 +77,7 @@ Default callback still only replaces the content in a save way (meaning if its a
 
 Also, one can use the a preset like setting to set multiple values:
 
-https://forums.tumult.com/uploads/db2156/original/3X/9/6/96edabcaca7c2c57eabfff4acfb7da559a526d21.gif
+![](https://forums.tumult.com/uploads/db2156/original/3X/9/6/96edabcaca7c2c57eabfff4acfb7da559a526d21.gif)
 
 ```
 // preset based overrides with hypeDocument callback
