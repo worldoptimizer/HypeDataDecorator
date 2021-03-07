@@ -125,6 +125,8 @@ HypeDataDecorator.mapAttributeToSelector(
 );
 ```
 
+
+![](https://forums.tumult.com/uploads/db2156/original/3X/c/1/c17abe06caccbfbd7b559aeb348dd755a5168a63.gif)
 With direct observation you can do the following (new since v1.2.6):
 
 ```javascript
