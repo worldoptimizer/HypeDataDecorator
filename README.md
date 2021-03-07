@@ -16,8 +16,8 @@ Notes for version 1.1
 **Explanation of initial-clause:** All values set with the attribute panel in Hype are persistent duo to the Hype runtime refreshing them on each scene load.  This little "genie" at work might be what people expect using the IDE but it certainly isn't how programmers updating values per script would expect things to behave. Hype DataDecorator 1.1 now has a baked in workaround for this… just add "-initial" to your attribute entry (for example `data-user-initial` given your key is normally `data-user`). Then this value will only be set as an initial value and honor updates done via script like `yourElement.dataset.user = "Max Musterman";` across scene transition. They are anyway honored in a scene context either way.
 
 **Regular usage:**
-```
-HypeDataDecorator.mapDataAttribute('label'});
+```javascript
+HypeDataDecorator.mapDataAttribute('label');
 ```
 Now every `data-label` value update reflects in groups and symbols on each element with the class `.label`.
 
@@ -94,8 +94,9 @@ HypeDataDecorator.mapAttributeToSelector(
 
 ```
 
-Default callback still only replaces the content in a save way (meaning if its and end node).
+---
 
+Default callback still only replaces the content in a save way (meaning if its and end node).
 Also, one can use the a preset like setting to set multiple values:
 
 ![](https://forums.tumult.com/uploads/db2156/original/3X/9/6/96edabcaca7c2c57eabfff4acfb7da559a526d21.gif)
@@ -125,9 +126,11 @@ HypeDataDecorator.mapAttributeToSelector(
 );
 ```
 
+---
+
+With direct observation you can do the following (new since v1.2.6):
 
 ![](https://forums.tumult.com/uploads/db2156/original/3X/c/1/c17abe06caccbfbd7b559aeb348dd755a5168a63.gif)
-With direct observation you can do the following (new since v1.2.6):
 
 ```javascript
 
