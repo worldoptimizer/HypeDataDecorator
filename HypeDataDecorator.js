@@ -1,5 +1,5 @@
 /*!
-Hype Data Decorator 1.2.6
+Hype Data Decorator 1.2.7
 copyright (c) 2019-2021 Max Ziebell, (https://maxziebell.de). MIT-license
 */
 
@@ -13,7 +13,8 @@ copyright (c) 2019-2021 Max Ziebell, (https://maxziebell.de). MIT-license
 * 1.2.3 Remove the possibility for recursive loops in IDE and console.log
 * 1.2.4 Added hypeDocument, symbolInstance to callback and setContent
 * 1.2.5 Renamed and refactored to Hype Data Decorator
-* 1.2.6 Another refactor, commented code, cleanup and direct observer
+* 1.2.6 Another refactor, comments in code, cleanup and direct observer
+* 1.2.7 Minor update: Adding the hypeDocumentElm and sceneElm to event
 */
 if("HypeDataDecorator" in window === false) window['HypeDataDecorator'] = (function () {
 
@@ -39,7 +40,7 @@ if("HypeDataDecorator" in window === false) window['HypeDataDecorator'] = (funct
 			// loop over declared observer 
 			_mapList.forEach(function(mapItem) {
 				// check if this has a attributeName and if so search for it and set it to trigger handler
-				if (mapItem.attributeName) mapItem.hypeDocumentElm.querySelectorAll('['+mapItem.attributeName+']').forEach(function(elm){
+				if (mapItem.attributeName) document.querySelectorAll('['+mapItem.attributeName+']').forEach(function(elm){
 					elm.setAttribute(mapItem.attributeName, elm.getAttribute(mapItem.attributeName));
 				});
 			});
@@ -97,12 +98,11 @@ if("HypeDataDecorator" in window === false) window['HypeDataDecorator'] = (funct
 		// unique key for this type of observer setup: attributeName observerd
 		var unique = uniqueObserverId(hypeDocumentElm, mapItem.attributeName);
 		
+		// Fake sceneElm as hypeDocumentElm
+		var sceneElm = hypeDocumentElm;		
+		
 		// only redeclare and start if not running
 		if (!_activated[unique]){
-
-			// let mapItem know where it has been activated for refreshIDE
-			if (_isHypeIDE) mapItem.hypeDocumentElm = hypeDocumentElm;
-
 			mapItem.observerFunction = function(mutations) {
 				mutations.forEach(function(mutation) {
 					if (mutation.attributeName == mapItem.attributeName) {
@@ -122,6 +122,9 @@ if("HypeDataDecorator" in window === false) window['HypeDataDecorator'] = (funct
 							// make sure we cast to an unified array of functions and establish fallback to setContent
 							var callbacks = castAsCallbackArray(mapItem.callback? mapItem.callback : setContent);
 
+							// set sceneElm if we are not in the IDE before applying callbacks
+							if (!_isHypeIDE) sceneElm = document.getElementById(hypeDocument.currentSceneId());
+
 							// run through array and execute function callbacks, pass on value if possible
 							var value;
 							for(var j=0; j<callbacks.length; j++){
@@ -129,6 +132,8 @@ if("HypeDataDecorator" in window === false) window['HypeDataDecorator'] = (funct
 									'value' : currentValue, 
 									'mutation': mutation,
 									'symbolInstance' : symbolInstance,
+									'hypeDocumentElm' : hypeDocumentElm,
+									'sceneElm' : sceneElm,
 								});
 							}
 						}
@@ -177,10 +182,12 @@ if("HypeDataDecorator" in window === false) window['HypeDataDecorator'] = (funct
 		// unique key for this type of observer setup: attributeName observerd
 		var unique = uniqueObserverId(hypeDocumentElm, mapItem.selector);
 		var attributeName = mapItem.attributeFilter? mapItem.attributeFilter[0] : 'style';
+
+		// Fake sceneElm as hypeDocumentElm
+		var sceneElm = hypeDocumentElm;
 		 
 		// only redeclare and start if not running
 		if (!_activated[unique]){
-
 			mapItem.observerFunction = function(mutations) {
 				mutations.forEach(function(mutation) {
 					// gate against unmatching calls
@@ -195,6 +202,9 @@ if("HypeDataDecorator" in window === false) window['HypeDataDecorator'] = (funct
 					// make sure we cast to an unified array of functions and establish fallback to setContent
 					var callbacks = castAsCallbackArray(mapItem.callback);
 
+					// set sceneElm if we are not in the IDE before applying callbacks
+					if (!_isHypeIDE) sceneElm = document.getElementById(hypeDocument.currentSceneId());
+
 					// run through array and execute function callbacks, pass on value if possible
 					var value;
 					for(var j=0; j<callbacks.length; j++){
@@ -202,6 +212,8 @@ if("HypeDataDecorator" in window === false) window['HypeDataDecorator'] = (funct
 							'value' : currentValue,
 							'mutation': mutation,
 							'symbolInstance' : symbolInstance,
+							'hypeDocumentElm' : hypeDocumentElm,
+							'sceneElm' : sceneElm,
 						});
 					}
 				});
@@ -312,7 +324,7 @@ if("HypeDataDecorator" in window === false) window['HypeDataDecorator'] = (funct
 	
 	/* Reveal Public interface to window['HypeDataDecorator'] */
 	return {
-		version: '1.2.6',
+		version: '1.2.7',
 		'mapDataAttribute' : mapDataAttribute,
 		'mapAttributeToSelector' : mapAttributeToSelector,
 		'observeBySelector' : observeBySelector,
