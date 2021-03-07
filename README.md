@@ -4,6 +4,7 @@
 <sup>The cover artwork is not hosted in this repository and &copy;opyrighted by Max Ziebell</sup>
 
 Project for getting reactivity and feedback directly in Tumult Hype 4 using the additional HTML-attributes panel for options.
+
 **Usage:** After registering the dataset keys with `HypeDataDecorator.mapDataAttribute` for example `HypeDataDecorator.mapDataAttribute('headline');` every element below an element that has a `data-headline` and has the class `.headline` inside will have the content defined under `data-headline`.
 
 
