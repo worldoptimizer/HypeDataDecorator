@@ -362,7 +362,7 @@ if("HypeDataDecorator" in window === false) window['HypeDataDecorator'] = (funct
 	}
 
 	/**
-	 * This function returns a list of all running observer. Mainly for testing.
+	 * This function returns a list of all running observer. For testing might get removed.
 	 *
 	 * @return Return array with active observer across all Hype documents
 	 */
