@@ -5,23 +5,23 @@
 
 Simple project to get text previews using data set values. If the browser supports Mutation Observer the dataset keys stay reactive. There is certainly better ways to implement reactivity with a object based two-way data storage like in React or Vue instead of distributed datasets, but it is a demo on getting feedback direct in the IDE and using the additional HTML-attributes panel provided by Hype.
 
-Usage: After registering the dataset keys with `HypeDataDecorator.mapDatasetToClass` for example `HypeDataDecorator.mapDatasetToClass('headline');` every element below an element that has a `data-headline` and has the class `.headline` inside will have the content defined under `data-headline`.
+Usage: After registering the dataset keys with `HypeDataDecorator.mapDataAttribute` for example `HypeDataDecorator.mapDataAttribute('headline');` every element below an element that has a `data-headline` and has the class `.headline` inside will have the content defined under `data-headline`.
 
 
 Notes for version 1.1
 ---
 
-**Example:** You mapped `data-user` with `HypeDataDecorator.mapDatasetToClass('user');` in your Head HTML. Whenever you assign `data-user` on a group or symbol all children withat have the CSS class `.user` will be updated. If you are doing this assignment in the IDE it will be set by Hype on every scene load. To avoid that just set `.user-initial` instead.
+**Example:** You mapped `data-user` with `HypeDataDecorator.mapDataAttribute('user');` in your Head HTML. Whenever you assign `data-user` on a group or symbol all children withat have the CSS class `.user` will be updated. If you are doing this assignment in the IDE it will be set by Hype on every scene load. To avoid that just set `.user-initial` instead.
 
 **Explanation of initial-clause:** All values set with the attribute panel in Hype are persistent duo to the Hype runtime refreshing them on each scene load.  This little "genie" at work might be what people expect using the IDE but it certainly isn't how programmers updating values per script would expect things to behave. Hype DataDecorator 1.1 now has a baked in workaround for this… just add "-initial" to your attribute entry (for example `data-user-initial` given your key is normally `data-user`). Then this value will only be set as an initial value and honor updates done via script like `yourElement.dataset.user = "Max Musterman";` across scene transition. They are anyway honored in a scene context either way.
 
 **Regular usage:**
 ```
-HypeDataDecorator.mapDatasetToClass('label'});
+HypeDataDecorator.mapDataAttribute('label'});
 ```
 Now every `data-label` value update reflects in groups and symbols on each element with the class `.label`.
 
-Notes for version 1.2.5
+Notes for version 1.2.6 
 ---
 <sup>Switched to semantic versioning.</sup>  
 **Usage with callback and refactored interface and name to reflect new capabilities:** 
@@ -29,47 +29,68 @@ Notes for version 1.2.5
 Various examples:
 
 ```javascript 
-// map based on class hence data-headline --> .headline with default innerHTML callback
-HypeDataDecorator.mapDatasetToClass('headline');
+// register an element decorator callback called bgcolor
+HypeDataDecorator.registerElementDecorator(
+	'bgcolor', 
+	function(hypeDocument, element, event){
+		element.style.backgroundColor = event.value;
+	}
+);
+
+// register an element decorator callback called randomcolor
+HypeDataDecorator.registerElementDecorator(
+	'randomcolor',
+	function(hypeDocument, element, event){
+		return {
+			value: 'rgb('+
+				Math.floor(Math.random()*256)+','+
+				Math.floor(Math.random()*256)+','+
+				Math.floor(Math.random()*256)+')'
+		}
+	}
+);
 
 // map based on class hence data-bgcolor --> .bgcolor with custom callback
-HypeDataDecorator.mapDatasetToClass('bgcolor', function(elm, value){
-	elm.style.backgroundColor = value;
-});
+HypeDataDecorator.mapAttributeToSelector(
+	'data-bgcolor', 
+	'.bgcolor', 
+	'randomcolor|bgcolor'
+);
 
-// map based on more complex selector with custom currency callback
-HypeDataDecorator.mapDatasetToSelector('price', '.currency.formatted', function(elm, value){
-	elm.innerHTML = new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(value); 
-});
+
+var upper = function(hypeDocument, element, event){
+	event.value = event.value.toUpperCase();
+	return event;
+}
+
+HypeDataDecorator.registerElementDecorator('upper', upper);
+
+// map data attribute to class hence data-headline --> .headline with default custom decorators by string joind by pipe symbol
+//HypeDataDecorator.mapDataAttribute('headline', 'upper|setContent');
+
+// this shows that you can mix and match registered decorator names and direct functions using an array
+HypeDataDecorator.mapDataAttribute('headline', [upper, 'setContent']);
 
 // callback with hypeDocument and symbolInstance
-HypeDataDecorator.mapDatasetToClass('symbol-start', function(elm, value, hypeDocument, symbolInstance){
-	if(symbolInstance) {
-		symbolInstance.startTimelineNamed(value, hypeDocument.kDirectionForward);
-		console.log("was here in document "+hypeDocument.documentId());
+HypeDataDecorator.mapAttributeToSelector(
+	'data-symbol-start', 
+	'.symbol-start', 
+	function(hypeDocument, element, event){
+		if(event.symbolInstance) {
+			event.symbolInstance.startTimelineNamed(event.value, hypeDocument.kDirectionForward);
+		}
 	}
-});
+);
 
-// preset based overrides with hypeDocument callback
-HypeDataDecorator.mapDatasetToClass('preset', function(elm, value){
-	switch (value){
-		case "invalid":
-			elm.style.backgroundColor = 'red';
-			elm.style.color = 'yellow';
-			elm.innerHTML = 'Broken!';
-			//...
-			break;
-
-		case "valid":
-			elm.style.backgroundColor = 'green';
-			elm.style.color = 'white';
-			elm.innerHTML = 'Fixed';
-			//...
-			break;
-
+// map based on more complex selector with custom currency callback (could use other dataset node for currency instead of de-DE)
+HypeDataDecorator.mapAttributeToSelector(
+	'data-price', 
+	'.currency.formatted', 
+	function(hypeDocument, element, event){
+		var currency = new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' });
+		HypeDataDecorator.setContent(element, currency.format(event.value)); 
 	}
-});
-
+);
 
 ```
 
@@ -81,24 +102,54 @@ Also, one can use the a preset like setting to set multiple values:
 
 ```
 // preset based overrides with hypeDocument callback
-HypeDataDecorator.mapDatasetToClass('preset', function(elm, value){
-	switch (value){
-		case "invalid":
-			elm.style.backgroundColor = 'red';
-			elm.style.color = 'yellow';
-			elm.innerHTML = 'Broken!';
-			//...
-			break;
-
-		case "valid":
-			elm.style.backgroundColor = 'green';
-			elm.style.color = 'white';
-			elm.innerHTML = 'Fixed';
-			//...
-			break;
-
+HypeDataDecorator.mapAttributeToSelector(
+	'data-preset',
+	'.preset', 
+	function(hypeDocument, element, event){
+		switch (event.value){
+			case "invalid":
+				element.style.backgroundColor = 'red';
+				element.style.color = 'yellow';
+				element.innerHTML = 'Broken!';
+				//...
+				break;
+	
+			case "valid":
+				element.style.backgroundColor = 'green';
+				element.style.color = 'white';
+				element.innerHTML = 'Fixed';
+				//...
+				break;
+		}
 	}
-});
+);
+```
+
+With direct observation you can do the following (new since v1.2.6):
+
+```javascript
+
+// setup a direct observer by selector and process it with callback
+HypeDataDecorator.observeBySelector(
+	'.progress', 
+	function(hypeDocument, element, event){
+		element.innerHTML = element.style.width;
+	}
+);
+
+// Complex oberserver example using some SVG magic pulling from defs and setting up multiple data attributes
+// in these cases it is more efficient (in my opinion) to set up this way but you can always also observer
+// each data attribute individually instead of with a single observer.
+HypeDataDecorator.observeBySelector('[data-marker-start],[data-marker-mid],[data-marker-end]', function(hypeDocument, element, event){
+	var pathElm = element.querySelector('path');
+	var markerStart = element.getAttribute('data-marker-start');
+	var markerMid = element.getAttribute('data-marker-mid');
+	var markerEnd = element.getAttribute('data-marker-end');
+	if (markerStart) pathElm.setAttribute('marker-start', 'url(#'+markerStart+')');
+	if (markerMid) pathElm.setAttribute('marker-mid', 'url(#'+markerMid+')');
+	if (markerEnd) pathElm.setAttribute('marker-end', 'url(#'+markerEnd+')');
+}, {attributeFilter: ['data-marker-start', 'data-marker-mid' , 'data-marker-end']});		
+
 ```
 
 ---
