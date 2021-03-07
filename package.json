@@ -1,0 +1,9 @@
+{
+    "name": "Hype DataDecorator",
+    "description": "Project for getting reactivity and feedback directly in Tumult Hype 4 using the additional HTML-attributes panel for options.",
+    "author": "Max Ziebell",
+    "main":	"HypeDataDecorator.js",
+    "license": "MIT",
+    "version": "1.2.7",
+    "dependencies": {}
+}
