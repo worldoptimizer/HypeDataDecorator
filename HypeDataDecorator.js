@@ -277,16 +277,46 @@ if("HypeDataDecorator" in window === false) window['HypeDataDecorator'] = (funct
 	// default callback sets innerHTML if we don't have any HYPE child nodes
 	// this helps in preventing undesired destruction of Hype managed nodes
 	// this is also set as default decorator and registers as a callback
+	
+	/**
+	 * This function allows to set innerHTML in a save way. Meaning it
+	 * helps in preventing undesired destruction of Hype managed nodes
+	 * this is also set as the default decorator and registers as a callback 
+	 *
+	 * @param {HTMLDivElement} element This is the element to set the content on
+	 * @param {String} value The value determins what is inserted to innerHTML
+	 */
 	function setContent(element, value){
 		if (!element) return;
 		if (element.querySelector('.HYPE_element_container, .HYPE_element')) return;
 		element.innerHTML = value;
 	}
 
-	function mapDataAttribute (key, callback){
-		mapAttributeToSelector('data-'+key, '.'+key, callback || _decorator[key] || setContent);
+	/**
+	 * This function is a proxy to HypeDataDecorator.mapAttributeToSelector and
+	 * and sets the attribute data-YOURKEY and maps it to the class .YOURKEY
+	 * serving as a shortcut. The callback is optional and has setContent as fallback.
+	 * The value of the data-YOURKEY will be forwarded to the callback(s) as event.value
+	 *
+	 * @param {String} key This is the data attribute we want to map
+	 * @param {String} callback This is an decorator callback and is optional
+	 * @param {Object} options These options are a mixin and still not used here
+	 */
+	function mapDataAttribute (key, callback, options){
+		mapAttributeToSelector('data-'+key, '.'+key, callback || _decorator[key] || setContent, options);
 	}
 	
+	/**
+	 * This function maps a attribute to selector and fires the given callback
+	 * on all its decendants. This function allows for more flexebility in mapping.
+	 * and the callback is optional and has setContent as fallback.
+	 * The value of the attribute will be forwarded to the callback(s) as event.value
+	 *
+	 * @param {String} key This is the attribute we want to map
+	 * @param {String} selector This is the selector we want to forward the value to
+	 * @param {String} callback This is an decorator callback and is optional
+	 * @param {Object} options These options are a mixin and still not used here
+	 */
 	function mapAttributeToSelector (key, selector, callback, options){
 		if (!validKey(key) || !selector || !callback) return;
 		options = options? options : {};
@@ -299,10 +329,27 @@ if("HypeDataDecorator" in window === false) window['HypeDataDecorator'] = (funct
 		}));
 	}
 
+	/**
+	 * This function allow to register a element decorator callback by name.
+	 * Having named callbacks allows to chain them and reuse them if wanted.
+	 *
+	 * @param {String} name This is the attribute we want to map
+	 * @param {Function} callback This is the function to be registered as an decorator
+	 */
 	function registerElementDecorator (name, callback){
 		_decorator[name] = callback; 
 	}
 
+	/**
+	 * This function maps sets up an HTML element observer that match a selector and a attribute.
+	 * By default the style attribute on the HTML element is observered for change.
+	 * To determine other attributes use the options as {attributesFilter: ['a','b']}.
+	 * If one needs to listen to all attributes set options as {attributesFilter: []}
+	 * 
+	 * @param {String} selector This is the selector that determin
+	 * @param {String} callback This is an decorator callback and is optional
+	 * @param {Object} options These options are a mixin and allow setting the attributeFilter
+	 */
 	function observeBySelector(selector, callback, options){
 		if (!selector || !callback) return;
 		options = options? options : {};
@@ -314,6 +361,11 @@ if("HypeDataDecorator" in window === false) window['HypeDataDecorator'] = (funct
 		}));	
 	}
 
+	/**
+	 * This function returns a list of all running observer. Mainly for testing.
+	 *
+	 * @return Return array with active observer across all Hype documents
+	 */
 	function getRunningObserver(){
 		return _activated;
 	}
