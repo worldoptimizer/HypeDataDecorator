@@ -167,7 +167,8 @@ HypeDataDecorator.observeBySelector('[data-marker-start],[data-marker-mid],[data
 `1.2.2 Minor bugfix on preview, refactored names (breaking change)`\
 `1.2.3 Remove the possibility for recursive loops in IDE and console.log`\
 `1.2.4 Added hypeDocument, symbolInstance to callback and setContent`\
-`1.2.5 Renamed and refactored to Hype Data Decorator`
+`1.2.5 Renamed and refactored to Hype Data Decorator`\
+`1.2.6 Another refactor, comments in code, cleanup and direct observer`
 
 Content Delivery Network (CDN)
 --
