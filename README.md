@@ -51,12 +51,10 @@ HypeDataDecorator.registerElementDecorator(
 );
 
 // map based on class hence data-bgcolor --> .bgcolor with custom callback
-HypeDataDecorator.mapAttributeToSelector(
-	'data-bgcolor', 
-	'.bgcolor', 
+HypeDataDecorator.mapDataAttribute(
+	'bgcolor', 
 	'randomcolor|bgcolor'
 );
-
 
 var upper = function(hypeDocument, element, event){
 	event.value = event.value.toUpperCase();
@@ -103,9 +101,8 @@ Also, one can use the a preset like setting to set multiple values:
 
 ```javascript
 // preset based overrides with hypeDocument callback
-HypeDataDecorator.mapAttributeToSelector(
-	'data-preset',
-	'.preset', 
+HypeDataDecorator.mapDataAttribute(
+	'preset',
 	function(hypeDocument, element, event){
 		switch (event.value){
 			case "invalid":
