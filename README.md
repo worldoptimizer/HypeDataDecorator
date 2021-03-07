@@ -3,7 +3,7 @@
 ![image|690x492](https://playground.maxziebell.de/Hype/DataDecorator/HypeDataDecorator.jpg)
 <sup>The cover artwork is not hosted in this repository and &copy;opyrighted by Max Ziebell</sup>
 
-Simple project to get text previews using data set values. If the browser supports Mutation Observer the dataset keys stay reactive. There is certainly better ways to implement reactivity with a object based two-way data storage like in React or Vue instead of distributed datasets, but it is a demo on getting feedback direct in the IDE and using the additional HTML-attributes panel provided by Hype.
+Simple project for getting reactivity and data feedback directly in the IDE and using the additional HTML-attributes panel provided by Tumult Hype 4.
 
 Usage: After registering the dataset keys with `HypeDataDecorator.mapDataAttribute` for example `HypeDataDecorator.mapDataAttribute('headline');` every element below an element that has a `data-headline` and has the class `.headline` inside will have the content defined under `data-headline`.
 
