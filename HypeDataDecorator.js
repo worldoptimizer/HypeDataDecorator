@@ -15,7 +15,7 @@ copyright (c) 2019-2021 Max Ziebell, (https://maxziebell.de). MIT-license
 * 1.2.5 Renamed and refactored to Hype Data Decorator
 * 1.2.6 Another refactor, comments in code, cleanup and direct observer
 * 1.2.7 Minor update: Adding the hypeDocumentElm and sceneElm to event
-* 1.2.8 Fixed bug in preventing mapDataAttribute having a default decorator
+* 1.2.8 Fixed bug that prevented mapDataAttribute to receive the default decorator
 */
 if("HypeDataDecorator" in window === false) window['HypeDataDecorator'] = (function () {
 
