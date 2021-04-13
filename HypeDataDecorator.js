@@ -1,5 +1,5 @@
 /*!
-Hype Data Decorator 1.2.7
+Hype Data Decorator 1.2.8
 copyright (c) 2019-2021 Max Ziebell, (https://maxziebell.de). MIT-license
 */
 
@@ -15,6 +15,7 @@ copyright (c) 2019-2021 Max Ziebell, (https://maxziebell.de). MIT-license
 * 1.2.5 Renamed and refactored to Hype Data Decorator
 * 1.2.6 Another refactor, comments in code, cleanup and direct observer
 * 1.2.7 Minor update: Adding the hypeDocumentElm and sceneElm to event
+* 1.2.8 Fixed bug in preventing mapDataAttribute having a default decorator
 */
 if("HypeDataDecorator" in window === false) window['HypeDataDecorator'] = (function () {
 
@@ -120,7 +121,7 @@ if("HypeDataDecorator" in window === false) window['HypeDataDecorator'] = (funct
 							var symbolInstance = hypeDocument? hypeDocument.getSymbolInstanceById(targetElms[i].id):null;
 
 							// make sure we cast to an unified array of functions and establish fallback to setContent
-							var callbacks = castAsCallbackArray(mapItem.callback? mapItem.callback : setContent);
+							var callbacks = castAsCallbackArray(mapItem.callback? mapItem.callback : _decorator.setContent);
 
 							// set sceneElm if we are not in the IDE before applying callbacks
 							if (!_isHypeIDE) sceneElm = document.getElementById(hypeDocument.currentSceneId());
@@ -199,7 +200,7 @@ if("HypeDataDecorator" in window === false) window['HypeDataDecorator'] = (funct
 					// resolve if we have a symbolInstance when running not in IDE
 					var symbolInstance = hypeDocument? hypeDocument.getSymbolInstanceById(mutation.target) : null;
 
-					// make sure we cast to an unified array of functions and establish fallback to setContent
+					// make sure we cast to an unified array of functions
 					var callbacks = castAsCallbackArray(mapItem.callback);
 
 					// set sceneElm if we are not in the IDE before applying callbacks
@@ -303,7 +304,7 @@ if("HypeDataDecorator" in window === false) window['HypeDataDecorator'] = (funct
 	 * @param {Object} options These options are a mixin and still not used here
 	 */
 	function mapDataAttribute (key, callback, options){
-		mapAttributeToSelector('data-'+key, '.'+key, callback || _decorator[key] || setContent, options);
+		mapAttributeToSelector('data-'+key, '.'+key, callback || _decorator[key] || _decorator.setContent, options);
 	}
 	
 	/**
@@ -376,7 +377,7 @@ if("HypeDataDecorator" in window === false) window['HypeDataDecorator'] = (funct
 	
 	/* Reveal Public interface to window['HypeDataDecorator'] */
 	return {
-		version: '1.2.7',
+		version: '1.2.8',
 		'mapDataAttribute' : mapDataAttribute,
 		'mapAttributeToSelector' : mapAttributeToSelector,
 		'observeBySelector' : observeBySelector,
